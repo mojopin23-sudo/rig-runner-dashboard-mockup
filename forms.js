@@ -7,7 +7,7 @@ function render(){
   <label>Submitted by<select name="Submitted by">${EMP.filter(inT).map(e=>`<option>${e.name}</option>`).join('')}</select></label>
   ${f.fields.map(([n,t,o])=>`<label>${n}${t==='sel'?`<select name="${n}">${o.map(x=>`<option>${x}</option>`).join('')}</select>`:`<input name="${n}" type="${t==='date'?'date':'text'}" required>`}</label>`).join('')}
   <button class="btn primary" ${readOnly()?'disabled title="Read-only role"':''}>Submit</button></form></section>`;}
- h+=`<div class="grid">${groups.map(g=>`<section class="card"><h2>${g}</h2><div class="body">${table(['Form','Submissions',''],FORMS.filter(f=>f.group===g).map(f=>[f.name,all.filter(s=>s.form===f.id&&inT(s)).length,`<a class="btn" href="forms.html?fill=${f.id}">Fill out</a>`]))}</div></section>`).join('')}</div>`;
+ h+=`<div class="wgrid">${groups.map(g=>`<section class="card"><h2>${g}</h2><div class="body">${table(['Form','Submissions',''],FORMS.filter(f=>f.group===g).map(f=>[f.name,all.filter(s=>s.form===f.id&&inT(s)).length,`<a class="btn" href="forms.html?fill=${f.id}">Fill out</a>`]))}</div></section>`).join('')}</div>`;
  h+=`<section class="card" style="margin-top:16px" id="subs"><h2>Submissions</h2><div class="filters"><label>Form<select id="sf"><option value="">All forms</option>${FORMS.map(f=>`<option value="${f.id}">${f.name}</option>`).join('')}</select></label>
  <label>From<input type="date" id="sd1"></label><label>To<input type="date" id="sd2"></label><span class="muted">Terminal filter: use the selector above</span></div><div id="stab"></div></section>`;
  $('#page').innerHTML=h;
