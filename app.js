@@ -73,7 +73,7 @@ EMP.forEach(e=>{e.h=PERIOD.map((_,i)=>hrs(e,i));e.tot=e.h.reduce((a,b)=>a+b,0);e
 function chrome(active){
  const nav=[['Dashboard','index.html'],['Calendar','calendar.html'],['Jobs',URLS.jobs],['Bids',URLS.bids],['Resources',URLS.res],['Reports','reports.html'],['Forms','forms.html'],['Documents','documents.html'],['Admin','admin.html']];
  document.body.insertAdjacentHTML('afterbegin',`<header class="topbar"><a class="brand" href="index.html"><img src="logo.png" alt="Rig Runner"><span class="divider"></span><span class="appname">Tracker</span></a>
- <nav class="nav">${nav.map(([n,h])=>`<a href="${h}" class="${n===active?'active':''}">${n}</a>`).join('')}</nav><span class="spacer"></span>
+ <nav class="nav">${nav.map(([n,h])=>`<a href="${h}" class="${n===active?'active':''}">${n}</a>`).join('')}</nav><span class="spacer"></span><div class="gs"><input id="gq" type="search" placeholder="Search jobs, bids, people, reports, forms, docs…" oninput="gsearch(this.value)" onfocus="gsearch(this.value)"><div id="gres"></div></div>
  <span class="user"><span class="avatar">RT</span><span>Ray Tolbert</span></span></header>
  <div class="ctl"><label>Terminal</label><select id="tsel"><option value="all">All terminals</option>${Object.entries(TERMS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
  <label style="margin-left:8px">Role</label><span class="seg" id="rsel">${['Admin','Dispatch','Management'].map(r=>`<button data-r="${r}">${r==='Management'?'Management (read-only)':r}</button>`).join('')}</span>
@@ -110,3 +110,22 @@ const SEED=[['jsa','2026-11-02','Wade Callister','308','Job #: J-26-1182 · Load
 .map(([form,date,by,term,summary])=>({form,date,by,term,summary}));
 const SUBS=()=>JSON.parse(localStorage.rrSubs||'[]').concat(SEED).sort((a,b)=>a.date<b.date?1:-1);
 const formName=id=>FORMS.find(f=>f.id===id).name;
+
+// ---------- shared lists for global search ----------
+const CATS=['Policies','Safety Manuals','HR / Handbook','Equipment Manuals','Training'];
+const DOCS=[['Drug & Alcohol Policy',0,'2026-09-14','all'],['Cell Phone & Distracted Driving Policy',0,'2026-06-02','all'],['Vehicle Use Policy',0,'2026-03-20','all'],['Terminal Yard Rules – Odessa',0,'2026-08-11','335'],
+['Hazard Communication Program',1,'2026-07-30','all'],['Rig Move Safety Manual',1,'2026-10-05','all'],['H2S Contingency Plan – Kilgore',1,'2026-05-18','346'],['Lifting & Rigging Procedures',1,'2026-04-09','all'],
+['Employee Handbook 2026',2,'2026-01-06','all'],['PTO & Holiday Schedule',2,'2026-01-06','all'],['Benefits Overview',2,'2026-02-15','all'],
+['Lowboy Trailer Operator Manual',3,'2025-11-12','all'],['Crane Load Chart Reference – Alice',3,'2026-07-01','308'],['Winch Truck Maintenance Guide – Jourdanton',3,'2026-03-03','331'],
+['New Hire Orientation Packet',4,'2026-09-01','all'],['Defensive Driving Refresher',4,'2026-08-20','all']].map(([title,c,date,term],i)=>({id:i,title,cat:CATS[c],date,term}));
+const REPNAMES=[['p30','30 Day Personnel View'],['bids','Bids'],['daily','Daily Log'],['dispatch','Dispatch (edits audit)'],['eqdates','Equipment Dates'],['inventory','Equipment Inventory'],['exception','Exception Queue'],['gross','Gross Payroll Report'],['inspect','Inspection Reports'],['jobres','Job Resources'],['jobs','Jobs'],['maint','Maintenance Requests'],['notif','Notifications'],['oo','Owner Operator Uploads'],['payroll','Payroll Period Report'],['perdiem','Per Diem'],['rigfolder','Rig Folder'],['gcnm','Good Catch / Near Miss (formerly SIF)'],['time','Time Records'],['training','Training / Certification Expiration'],['waybills','Waybills']];
+function gsearch(q){q=q.trim().toLowerCase();const box=$('#gres');if(q.length<2){box.style.display='none';return}
+ const m=s=>String(s).toLowerCase().includes(q);
+ const G=[['Jobs',JOBS.filter(j=>m(j.job+' '+j.rig+' '+j.cust+' '+j.status+' '+j.term)).map(j=>[j.job+' · '+j.rig,j.status+' · '+TERMS[j.term],URLS.jobs])],
+ ['Bids',BIDS.filter(b=>m(b.bid+' '+b.rig+' '+b.cust+' '+b.status)).map(b=>[b.bid+' · '+b.rig,b.status+' · '+b.cust,URLS.bids])],
+ ['Resources',EMP.filter(e=>m(e.name+' '+e.occ)).map(e=>[e.name,e.occ+' · '+TERMS[e.term],URLS.res]).concat(EQ.filter(x=>m(x.unit+' '+x.make)).map(x=>[x.unit,x.year+' '+x.make,URLS.res]))],
+ ['Reports',REPNAMES.filter(r=>m(r[1])).map(r=>[r[1],'Report','reports.html?r='+r[0]])],
+ ['Forms',FORMS.filter(f=>m(f.name+' '+f.group)).map(f=>[f.name,f.group+' form','forms.html?fill='+f.id])],
+ ['Documents',DOCS.filter(d=>m(d.title+' '+d.cat)).map(d=>[d.title,d.cat+' · PDF','documents.html?q='+encodeURIComponent(d.title)])]].filter(g=>g[1].length);
+ box.innerHTML=G.length?G.map(([g,r])=>`<div class="gh">${g} (${r.length})</div>`+r.slice(0,5).map(([t,s,u])=>`<a href="${u}"><b>${t}</b><span>${s}</span></a>`).join('')).join(''):'<div class="gh">No results</div>';box.style.display='block'}
+document.addEventListener("click",e=>{if(!e.target.closest(".gs")){const b=document.getElementById("gres");if(b)b.style.display="none"}});
