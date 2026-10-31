@@ -71,7 +71,7 @@ const hrs=(e,i)=>{const n=EMP.indexOf(e);if(PERIOD[i]>TODAY)return 0;const v=((n
 EMP.forEach(e=>{e.h=PERIOD.map((_,i)=>hrs(e,i));e.tot=e.h.reduce((a,b)=>a+b,0);e.reg=Math.min(80,e.tot);e.ot=e.tot-e.reg;e.rate=e.occ.includes('Crane')?31:e.occ.includes('Pusher')?33:e.occ==='Owner Operator'?0:25;e.wage=e.reg*e.rate+e.ot*e.rate*1.5;e.job=JOBS.filter(j=>j.term===e.term&&j.status!=='Completed')[0].job});
 // ---------- chrome ----------
 function chrome(active){
- const nav=[['Dashboard','index.html'],['Calendar','calendar.html'],['Jobs',URLS.jobs],['Bids',URLS.bids],['Resources',URLS.res],['Reports','reports.html'],['Forms','forms.html'],['Admin','admin.html']];
+ const nav=[['Dashboard','index.html'],['Calendar','calendar.html'],['Jobs',URLS.jobs],['Bids',URLS.bids],['Resources',URLS.res],['Reports','reports.html'],['Forms','forms.html'],['Documents','documents.html'],['Admin','admin.html']];
  document.body.insertAdjacentHTML('afterbegin',`<header class="topbar"><a class="brand" href="index.html"><img src="logo.png" alt="Rig Runner"><span class="divider"></span><span class="appname">Tracker</span></a>
  <nav class="nav">${nav.map(([n,h])=>`<a href="${h}" class="${n===active?'active':''}">${n}</a>`).join('')}</nav><span class="spacer"></span>
  <span class="user"><span class="avatar">RT</span><span>Ray Tolbert</span></span></header>
