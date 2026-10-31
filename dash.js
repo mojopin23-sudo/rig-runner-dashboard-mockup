@@ -30,13 +30,12 @@ function render(){
  const PJ=J.filter(j=>j.date>='2026-10-01');const rv=PJ.reduce((a,j)=>a+j.rev,0),cs=PJ.reduce((a,j)=>a+j.cost,0);
  const pl=canMoney()?`<div class="pills"><span class="pill">Revenue<b>${money(rv)}</b></span><span class="pill">Cost<b>${money(cs)}</b></span><span class="pill">Profit<b>${money(rv-cs)}</b></span><span class="pill">Margin<b>${rv?Math.round((rv-cs)/rv*100):0}%</b></span></div>`+
   table(['Job','Rig','Status','Revenue','Cost','Profit','Margin'],PJ.map(j=>[j.job,j.rig,tag(j.status),money(j.rev),money(j.cost),money(j.rev-j.cost),Math.round((j.rev-j.cost)/j.rev*100)+'%']),()=>URLS.jobs):'';
- const FS=SUBS().filter(inT).slice(0,5);const fsw=table(['Date','Form','By'],FS.map(f=>[fd(f.date),formName(f.form),f.by]),i=>'forms.html?form='+FS[i].form);
  $('#dash').innerHTML=
   card("Today's rig moves &middot; this week",'calendar.html',cal,'wide')+
   card('Open bids by status',R('bids'),bids)+card('Active jobs',R('jobs'),jobs)+
   card('Exception Queue',R('exception'),exc)+card('Maintenance Requests',R('maint'),mnt)+
   card('Expiring items (next 30 days)',R('eqdates'),exp)+card('Good Catch / Near Miss',R('gcnm'),gc)+
-  card('Notifications',R('notif'),nt)+card('Payroll period hours',R('payroll'),pay)+card('Recent form submissions','forms.html',fsw)+
+  card('Notifications',R('notif'),nt)+card('Payroll period hours',R('payroll'),pay)+
   (pl?card('Job P&amp;L &middot; Oct–Nov 2026 jobs (Admin / Management)',R('jobs'),pl,'wide'):'');
  $('#scope').textContent=(S.t==='all'?'All terminals':TERMS[S.t])+' · viewing as '+S.role+(readOnly()?' (read-only)':'');
 }
