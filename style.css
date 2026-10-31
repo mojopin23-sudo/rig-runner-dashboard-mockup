@@ -22,7 +22,7 @@ button{font-family:inherit}
 .user{display:flex;align-items:center;gap:8px;color:var(--grey);font-size:13px}
 .avatar{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
 /* ---------- layout ---------- */
-main{flex:1;width:100%;max-width:1320px;margin:0 auto;padding:22px 24px 40px}
+main{flex:1;width:100%;max-width:1300px;margin:0 auto;padding:22px 24px 40px}
 footer.appfoot{text-align:center;color:var(--grey);font-size:12px;padding:14px;border-top:1px solid var(--line);background:#fff}
 .page-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .page-head h1{font-size:22px;margin:0}
@@ -84,7 +84,7 @@ table.grid th.num{text-align:right}
 .equip-list{display:flex;flex-direction:column;gap:6px;max-width:560px}
 .equip-row{display:flex;align-items:center;gap:10px;min-height:38px;flex-wrap:wrap}
 .equip-row .chk{min-width:130px}
-.equip-row .qty{flex:1;min-width:140px;max-width:320px}
+.equip-row .qty{flex:1;min-width:140px;max-width:330px}
 .equip-row .qty input{width:100%;font-size:14px;padding:7px 9px;border:1px solid #cfcfca;border-radius:6px}
 .equip-row.invalid .qty input{border-color:#d0021b;background:#fff7f7}
 .equip-row .err{flex-basis:100%;margin:0 0 0 140px}
